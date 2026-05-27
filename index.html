@@ -1,0 +1,1183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creativity Warm-Ups</title>
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --bg: #0000cc;
+            --surface: #0000ee;
+            --primary: #0000ff;
+            --text: #ffffff;
+            --text-light: rgba(255,255,255,0.7);
+            --border: rgba(255,255,255,0.2);
+            --shadow: 0 4px 24px rgba(0,0,0,0.3);
+            --shadow-hover: 0 12px 40px rgba(0,0,0,0.45);
+            --radius: 18px;
+            --transition: 0.32s cubic-bezier(.4,0,.2,1);
+        }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+        }
+
+        header {
+            background: #0000ff;
+            color: #fff;
+            padding: 48px 24px 36px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            border-bottom: 1px solid rgba(255,255,255,0.15);
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at 20% 50%, rgba(255,255,255,0.08) 0%, transparent 60%),
+                        radial-gradient(ellipse at 80% 30%, rgba(255,255,255,0.06) 0%, transparent 55%);
+            pointer-events: none;
+        }
+
+        header h1 {
+            font-size: clamp(2rem, 5vw, 3.4rem);
+            font-weight: 800;
+            letter-spacing: -1px;
+            position: relative;
+            color: #ffffff;
+        }
+
+        header p {
+            margin-top: 12px;
+            font-size: 1.1rem;
+            color: rgba(255,255,255,0.75);
+            position: relative;
+        }
+
+        /* ===== CONTROLS ===== */
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            justify-content: center;
+            align-items: center;
+            padding: 22px 24px 18px;
+            background: #0000dd;
+            border-bottom: 1px solid rgba(255,255,255,0.15);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 16px rgba(0,0,0,0.25);
+        }
+
+        .search-wrap {
+            position: relative;
+            flex: 1;
+            min-width: 220px;
+            max-width: 380px;
+        }
+
+        .search-wrap svg {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            opacity: 0.6;
+            pointer-events: none;
+            stroke: #fff;
+        }
+
+        #search {
+            width: 100%;
+            padding: 11px 16px 11px 42px;
+            border: 2px solid rgba(255,255,255,0.25);
+            border-radius: 50px;
+            font-size: 0.97rem;
+            background: rgba(255,255,255,0.1);
+            color: #ffffff;
+            transition: border-color var(--transition), box-shadow var(--transition);
+            outline: none;
+        }
+
+        #search::placeholder { color: rgba(255,255,255,0.5); }
+        #search:focus {
+            border-color: rgba(255,255,255,0.7);
+            background: rgba(255,255,255,0.15);
+            box-shadow: 0 0 0 3px rgba(255,255,255,0.12);
+        }
+
+        .filter-btns { display: flex; flex-wrap: wrap; gap: 8px; }
+
+        .filter-btn {
+            padding: 8px 18px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 50px;
+            font-size: 0.88rem;
+            font-weight: 600;
+            cursor: pointer;
+            background: transparent;
+            color: rgba(255,255,255,0.75);
+            transition: all var(--transition);
+        }
+
+        .filter-btn:hover {
+            background: rgba(255,255,255,0.15);
+            color: #ffffff;
+            border-color: rgba(255,255,255,0.55);
+        }
+
+        .filter-btn.active {
+            background: #ffffff;
+            color: #0000ff;
+            border-color: #ffffff;
+            font-weight: 800;
+        }
+
+        .count-badge {
+            font-size: 0.82rem;
+            color: rgba(255,255,255,0.65);
+            white-space: nowrap;
+        }
+
+        /* ===== GRID ===== */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+            gap: 24px;
+            padding: 36px 28px 64px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* ===== CARD ===== */
+        .card {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            transition: transform var(--transition), box-shadow var(--transition), background var(--transition);
+            cursor: pointer;
+        }
+
+        .card:hover {
+            transform: translateY(-6px) scale(1.012);
+            box-shadow: var(--shadow-hover);
+            background: rgba(255,255,255,0.16);
+            border-color: rgba(255,255,255,0.4);
+        }
+
+        .card.hidden { display: none; }
+
+        .card-accent {
+            height: 4px;
+            width: 100%;
+            background: rgba(255,255,255,0.5);
+            flex-shrink: 0;
+        }
+
+        .card-header {
+            padding: 22px 22px 14px;
+            display: flex;
+            align-items: flex-start;
+            gap: 14px;
+        }
+
+        /* Simple white SVG icon box */
+        .card-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.25);
+        }
+
+        .card-icon svg {
+            width: 24px;
+            height: 24px;
+            stroke: #ffffff;
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .card-title-block { flex: 1; }
+
+        .card-title {
+            font-size: 1.18rem;
+            font-weight: 800;
+            line-height: 1.25;
+            color: #ffffff;
+        }
+
+        .card-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 6px;
+            font-size: 0.77rem;
+            font-weight: 700;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            padding: 3px 10px 3px 8px;
+            border-radius: 50px;
+            background: rgba(255,255,255,0.18);
+            color: rgba(255,255,255,0.9);
+            border: 1px solid rgba(255,255,255,0.25);
+        }
+
+        .card-tag svg {
+            width: 13px;
+            height: 13px;
+            stroke: #ffffff;
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            flex-shrink: 0;
+        }
+
+        .card-goal {
+            padding: 0 22px 14px;
+            font-size: 0.93rem;
+            color: rgba(255,255,255,0.75);
+            line-height: 1.55;
+        }
+
+        .card-meta {
+            display: flex;
+            gap: 14px;
+            padding: 0 22px 14px;
+            font-size: 0.82rem;
+            color: rgba(255,255,255,0.6);
+            flex-wrap: wrap;
+        }
+
+        .card-meta span {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .card-meta svg {
+            width: 13px;
+            height: 13px;
+            stroke: rgba(255,255,255,0.55);
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            flex-shrink: 0;
+        }
+
+        .card-footer {
+            margin-top: auto;
+            padding: 13px 22px;
+            border-top: 1px solid rgba(255,255,255,0.15);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .expand-btn {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            cursor: pointer;
+            font-size: 0.87rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 7px 14px;
+            border-radius: 50px;
+            transition: background var(--transition);
+            color: rgba(255,255,255,0.85);
+        }
+
+        .expand-btn:hover { background: rgba(255,255,255,0.2); color: #ffffff; }
+
+        .expand-btn svg {
+            width: 14px;
+            height: 14px;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 2.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            transition: transform var(--transition);
+        }
+
+        .card.expanded .expand-btn svg { transform: rotate(180deg); }
+
+        .time-chip {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            padding: 5px 12px;
+            border-radius: 50px;
+            background: rgba(255,255,255,0.12);
+            color: rgba(255,255,255,0.75);
+            border: 1px solid rgba(255,255,255,0.18);
+        }
+
+        .time-chip svg {
+            width: 12px;
+            height: 12px;
+            stroke: rgba(255,255,255,0.6);
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+        }
+
+        /* ===== EXPANDED DETAILS ===== */
+        .card-details {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.55s cubic-bezier(.4,0,.2,1);
+        }
+
+        .card.expanded .card-details { max-height: 1200px; }
+
+        .card-details-inner {
+            padding: 0 22px 26px;
+            border-top: 1px solid rgba(255,255,255,0.15);
+        }
+
+        .detail-section { margin-top: 18px; }
+
+        .detail-section h4 {
+            font-size: 0.78rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: rgba(255,255,255,0.6);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 7px;
+        }
+
+        .detail-section h4 svg {
+            width: 14px;
+            height: 14px;
+            stroke: rgba(255,255,255,0.55);
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            flex-shrink: 0;
+        }
+
+        .step-list { list-style: none; }
+        .step-list li {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 10px;
+            font-size: 0.91rem;
+            line-height: 1.55;
+            align-items: flex-start;
+            color: rgba(255,255,255,0.88);
+        }
+
+        .step-num {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 800;
+            flex-shrink: 0;
+            background: rgba(255,255,255,0.2);
+            color: #ffffff;
+            border: 1px solid rgba(255,255,255,0.3);
+            margin-top: 1px;
+        }
+
+        .bullet-list { list-style: none; }
+        .bullet-list li {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 8px;
+            font-size: 0.91rem;
+            line-height: 1.5;
+            color: rgba(255,255,255,0.88);
+            align-items: flex-start;
+        }
+
+        .bullet-arrow {
+            color: rgba(255,255,255,0.6);
+            flex-shrink: 0;
+            margin-top: 1px;
+            font-weight: 700;
+        }
+
+        .materials-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+
+        .material-chip {
+            font-size: 0.82rem;
+            padding: 5px 12px;
+            border-radius: 50px;
+            background: rgba(255,255,255,0.12);
+            border: 1px solid rgba(255,255,255,0.22);
+            color: rgba(255,255,255,0.9);
+        }
+
+        .notice-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+
+        .notice-item {
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            padding: 10px 12px;
+            font-size: 0.86rem;
+            line-height: 1.45;
+            border-left: 3px solid rgba(255,255,255,0.45);
+            color: rgba(255,255,255,0.85);
+        }
+
+        /* ===== EMPTY STATE ===== */
+        .empty-state {
+            grid-column: 1/-1;
+            text-align: center;
+            padding: 80px 24px;
+            color: rgba(255,255,255,0.6);
+        }
+
+        .empty-state svg {
+            width: 48px;
+            height: 48px;
+            stroke: rgba(255,255,255,0.4);
+            fill: none;
+            stroke-width: 1.5;
+            stroke-linecap: round;
+            margin-bottom: 16px;
+        }
+
+        .empty-state h3 { font-size: 1.3rem; margin-bottom: 8px; color: #ffffff; }
+
+        /* ===== MODAL ===== */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,80,0.8);
+            backdrop-filter: blur(6px);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity var(--transition);
+        }
+
+        .modal-overlay.open { opacity: 1; pointer-events: all; }
+
+        .modal {
+            background: #0000ee;
+            border: 1px solid rgba(255,255,255,0.25);
+            border-radius: 24px;
+            width: 100%;
+            max-width: 640px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 24px 80px rgba(0,0,0,0.5);
+            transform: scale(0.93) translateY(20px);
+            transition: transform var(--transition);
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255,255,255,0.3) transparent;
+        }
+
+        .modal-overlay.open .modal { transform: scale(1) translateY(0); }
+
+        .modal-accent {
+            height: 5px;
+            border-radius: 24px 24px 0 0;
+            background: rgba(255,255,255,0.5);
+        }
+
+        .modal-header {
+            padding: 24px 28px 16px;
+            display: flex;
+            align-items: flex-start;
+            gap: 16px;
+        }
+
+        .modal-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.25);
+        }
+
+        .modal-icon svg {
+            width: 28px;
+            height: 28px;
+            stroke: #ffffff;
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .modal-title-block { flex: 1; }
+
+        .modal-title {
+            font-size: 1.55rem;
+            font-weight: 800;
+            color: #ffffff;
+            line-height: 1.2;
+        }
+
+        .modal-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 7px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 4px 12px 4px 9px;
+            border-radius: 50px;
+            background: rgba(255,255,255,0.18);
+            color: rgba(255,255,255,0.9);
+            border: 1px solid rgba(255,255,255,0.25);
+        }
+
+        .modal-tag svg {
+            width: 13px;
+            height: 13px;
+            stroke: #ffffff;
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            flex-shrink: 0;
+        }
+
+        .modal-close {
+            background: rgba(255,255,255,0.12);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255,255,255,0.8);
+            transition: background var(--transition);
+            flex-shrink: 0;
+        }
+
+        .modal-close:hover { background: rgba(255,255,255,0.25); color: #ffffff; }
+
+        .modal-close svg {
+            width: 16px;
+            height: 16px;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 2.5;
+            stroke-linecap: round;
+        }
+
+        .modal-body { padding: 0 28px 32px; color: #ffffff; }
+
+        .modal-goal {
+            font-size: 1rem;
+            color: rgba(255,255,255,0.85);
+            line-height: 1.6;
+            margin-bottom: 18px;
+            padding: 14px 16px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 12px;
+            border-left: 4px solid rgba(255,255,255,0.5);
+        }
+
+        .modal-desc {
+            font-size: 0.97rem;
+            line-height: 1.65;
+            color: rgba(255,255,255,0.82);
+            margin-bottom: 24px;
+        }
+
+        .modal-section { margin-bottom: 22px; }
+
+        .modal-section h4 {
+            font-size: 0.8rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: rgba(255,255,255,0.55);
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .modal-section h4 svg {
+            width: 14px;
+            height: 14px;
+            stroke: rgba(255,255,255,0.5);
+            fill: none;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            flex-shrink: 0;
+        }
+
+        /* ===== SCROLLBAR ===== */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.25); border-radius: 10px; }
+
+        /* ===== ANIMATIONS ===== */
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .card { animation: fadeInUp 0.4s ease both; }
+        .card:nth-child(1)  { animation-delay: 0.03s; }
+        .card:nth-child(2)  { animation-delay: 0.06s; }
+        .card:nth-child(3)  { animation-delay: 0.09s; }
+        .card:nth-child(4)  { animation-delay: 0.12s; }
+        .card:nth-child(5)  { animation-delay: 0.15s; }
+        .card:nth-child(6)  { animation-delay: 0.18s; }
+        .card:nth-child(7)  { animation-delay: 0.21s; }
+        .card:nth-child(8)  { animation-delay: 0.24s; }
+        .card:nth-child(9)  { animation-delay: 0.27s; }
+        .card:nth-child(10) { animation-delay: 0.30s; }
+        .card:nth-child(11) { animation-delay: 0.33s; }
+        .card:nth-child(12) { animation-delay: 0.36s; }
+        .card:nth-child(13) { animation-delay: 0.39s; }
+        .card:nth-child(14) { animation-delay: 0.42s; }
+        .card:nth-child(15) { animation-delay: 0.45s; }
+        .card:nth-child(16) { animation-delay: 0.48s; }
+        .card:nth-child(17) { animation-delay: 0.51s; }
+        .card:nth-child(18) { animation-delay: 0.54s; }
+        .card:nth-child(19) { animation-delay: 0.57s; }
+        .card:nth-child(20) { animation-delay: 0.60s; }
+
+        @media (max-width: 600px) {
+            .grid { padding: 20px 16px 48px; gap: 16px; }
+            .controls { padding: 14px 16px; }
+            .notice-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <h1>Creativity Warm-Ups</h1>
+    <p>20 activities to spark divergent thinking, ideation & creative confidence</p>
+</header>
+
+<div class="controls">
+    <div class="search-wrap">
+        <svg width="17" height="17" fill="none" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input type="text" id="search" placeholder="Search activities…" aria-label="Search activities">
+    </div>
+    <div class="filter-btns" id="filterBtns">
+        <button class="filter-btn active" data-filter="all">All</button>
+        <button class="filter-btn" data-filter="divergent">Divergent Thinking</button>
+        <button class="filter-btn" data-filter="collaboration">Collaboration</button>
+        <button class="filter-btn" data-filter="communication">Communication</button>
+        <button class="filter-btn" data-filter="empathy">Empathy</button>
+        <button class="filter-btn" data-filter="prototyping">Prototyping</button>
+    </div>
+    <span class="count-badge" id="countBadge">20 activities</span>
+</div>
+
+<div class="grid" id="grid"></div>
+
+<!-- Detail Modal -->
+<div class="modal-overlay" id="modalOverlay" role="dialog" aria-modal="true">
+    <div class="modal">
+        <div class="modal-accent"></div>
+        <div class="modal-header">
+            <div class="modal-icon" id="modalIcon"></div>
+            <div class="modal-title-block">
+                <div class="modal-title" id="modalTitle"></div>
+                <span class="modal-tag" id="modalTag"></span>
+            </div>
+            <button class="modal-close" id="modalClose" aria-label="Close">
+                <svg viewBox="0 0 24 24"><path d="M18 6 6 18M6 6l12 12"/></svg>
+            </button>
+        </div>
+        <div class="modal-body" id="modalBody"></div>
+    </div>
+</div>
+
+<script>
+/* ===== SVG ICON LIBRARY ===== */
+const icons = {
+    // Category icons
+    divergent: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M4.22 4.22l2.12 2.12M17.66 17.66l2.12 2.12M2 12h3M19 12h3M4.22 19.78l2.12-2.12M17.66 6.34l2.12-2.12"/></svg>',
+    collaboration: '<svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg>',
+    communication: '<svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>',
+    empathy: '<svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>',
+    prototyping: '<svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>',
+
+    // Activity-specific icons
+    circles:      '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="4"/></svg>',
+    globe:        '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>',
+    pencil:       '<svg viewBox="0 0 24 24"><path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/></svg>',
+    target:       '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>',
+    refresh:      '<svg viewBox="0 0 24 24"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>',
+    flask:        '<svg viewBox="0 0 24 24"><path d="M9 3h6M9 3v7l-4 8a1 1 0 0 0 .9 1.5h12.2A1 1 0 0 0 21 18l-4-8V3"/><line x1="9" y1="11" x2="15" y2="11"/></svg>',
+    chat:         '<svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/><line x1="9" y1="10" x2="15" y2="10"/><line x1="9" y1="14" x2="12" y2="14"/></svg>',
+    build:        '<svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><line x1="12" y1="12" x2="12" y2="16"/><line x1="10" y1="14" x2="14" y2="14"/></svg>',
+    bomb:         '<svg viewBox="0 0 24 24"><circle cx="11" cy="13" r="8"/><path d="M14 2l3 3-1.5 1.5"/><path d="M17 5l2-2"/></svg>',
+    crystal:      '<svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>',
+    book:         '<svg viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/><line x1="9" y1="7" x2="15" y2="7"/><line x1="9" y1="11" x2="12" y2="11"/></svg>',
+    beaker:       '<svg viewBox="0 0 24 24"><path d="M8 3v8l-4 8a1 1 0 0 0 .9 1.5h14.2A1 1 0 0 0 20 19l-4-8V3"/><line x1="8" y1="3" x2="16" y2="3"/><path d="M9.5 14h5"/></svg>',
+    arrowleft:    '<svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/><polyline points="19 18 13 12 19 6"/></svg>',
+    smile:        '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>',
+    mic:          '<svg viewBox="0 0 24 24"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>',
+    wrench:       '<svg viewBox="0 0 24 24"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>',
+    opposite:     '<svg viewBox="0 0 24 24"><path d="M7 16V4m0 0L3 8m4-4 4 4"/><path d="M17 8v12m0 0 4-4m-4 4-4-4"/></svg>',
+    question:     '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>',
+    swirl:        '<svg viewBox="0 0 24 24"><path d="M12 22C6.48 22 2 17.52 2 12S6.48 2 12 2s10 4.48 10 10"/><path d="M12 18a6 6 0 0 1 0-12"/><path d="M12 14a2 2 0 0 1 0-4"/></svg>',
+    handshake:    '<svg viewBox="0 0 24 24"><path d="M20.42 4.58a5.4 5.4 0 0 0-7.65 0l-.77.78-.77-.78a5.4 5.4 0 0 0-7.65 0C1.46 6.7 1.33 10.28 4 13l8 8 8-8c2.67-2.72 2.54-6.3.42-8.42z"/><line x1="12" y1="5.8" x2="12" y2="13"/></svg>',
+
+    // Section icons
+    materials:    '<svg viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>',
+    instructions: '<svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>',
+    todo:         '<svg viewBox="0 0 24 24"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>',
+    notice:       '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>',
+    clock:        '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
+    grid:         '<svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>',
+    search:       '<svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>',
+    steps:        '<svg viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>',
+};
+
+const activities = [
+    {
+        id: 1, title: "Circles Challenge", icon: "circles", time: "2 min",
+        category: "divergent", categoryLabel: "Divergent Thinking",
+        goal: "Practice divergent thinking, speed, visual ideation, and overcoming perfectionism.",
+        description: "A fast-paced sketching activity where participants transform simple circles into as many different ideas as possible. The challenge encourages quantity over quality and helps participants loosen up creatively.",
+        materials: ["Blank paper or worksheets with circles", "Markers, pens, or pencils", "Timer"],
+        instructions: ["Fill a page with blank circles for 2 minutes.", "When time starts, transform as many circles as possible into recognizable objects, characters, symbols, or scenes.", "Quantity matters more than quality — keep moving!", "Share favorite or weirdest ideas with the group."],
+        todo: ["Keep drawing continuously", "Push past obvious ideas", "Try unusual interpretations"],
+        notice: ["How quickly your first ideas become repetitive", "When your most creative ideas begin appearing", "How removing perfectionism changes creativity"]
+    },
+    {
+        id: 2, title: "Save The World Challenge", icon: "globe", time: "5 min",
+        category: "divergent", categoryLabel: "Divergent Thinking",
+        goal: "Practice reframing challenges and rapid idea generation under creative constraints.",
+        description: "Teams receive a random object and a large global issue, then must invent an unexpected solution using only that object.",
+        materials: ["Random objects", "Challenge prompt cards", "Paper or sticky notes", "Timer"],
+        instructions: ["Each group receives one random object and one global issue.", "Teams have 5 minutes to invent a solution using only that object.", "Prepare a quick 30-second pitch explaining how your object solves the problem.", "Share ideas with the room."],
+        todo: ["Think beyond realistic limitations", "Build off teammates' ideas", "Focus on creative connections"],
+        notice: ["How constraints spark creativity", "Which ideas feel surprisingly practical", "How teams reframe problems differently"]
+    },
+    {
+        id: 3, title: "Draw It! Don't Say It", icon: "pencil", time: "10 min",
+        category: "empathy", categoryLabel: "Empathy",
+        goal: "Practice empathy, active listening, interpretation, and visual storytelling.",
+        description: "Participants describe personal experiences while partners visually interpret the story without direct visual instructions.",
+        materials: ["Paper", "Markers or pencils", "Reflection journals"],
+        instructions: ["Individually reflect on a challenging classroom experience and write about it for 5 minutes.", "Partner A describes their experience in detail WITHOUT suggesting images.", "Partner B draws what they imagine using only visuals, symbols, or metaphors.", "Switch roles and repeat.", "Reflect together."],
+        todo: ["Listen carefully for emotional details", "Use metaphor and symbolism", "Avoid asking clarifying questions"],
+        notice: ["What details stand out most", "How assumptions shape interpretation", "How visuals communicate emotion differently than words"]
+    },
+    {
+        id: 4, title: "Taskmaster Challenge", icon: "target", time: "Timed",
+        category: "collaboration", categoryLabel: "Collaboration",
+        goal: "Practice lateral thinking, collaboration, experimentation, and creative problem-solving.",
+        description: "Participants complete unusual open-ended tasks using limited materials and creative experimentation.",
+        materials: ["Assorted craft materials", "Tape, cardboard, paper, markers", "Random objects", "Timer"],
+        instructions: ["Participants work individually or in teams.", "Teams receive a strange or open-ended challenge.", "Use available materials and creative thinking to complete the task before time runs out.", "Present solutions and reflect on different approaches."],
+        todo: ["Experiment quickly", "Prototype rather than over-plan", "Encourage wild ideas"],
+        notice: ["Different approaches to the same challenge", "How teams adapt when ideas fail", "Unexpected uses of materials"]
+    },
+    {
+        id: 5, title: "Multiple Uses Challenge", icon: "refresh", time: "2 min",
+        category: "divergent", categoryLabel: "Divergent Thinking",
+        goal: "Practice divergent thinking and identifying unconventional possibilities.",
+        description: "Participants brainstorm as many alternative uses as possible for a common object within a short time limit.",
+        materials: ["Everyday objects", "Paper or sticky notes", "Timer"],
+        instructions: ["Participants are shown a random object.", "You have 2 minutes to list as many alternative uses as possible.", "Push beyond obvious ideas — weird ideas are encouraged!", "Compare lists and celebrate unusual thinking."],
+        todo: ["Keep writing without stopping", "Move past realistic answers", "Build on previous ideas"],
+        notice: ["When ideas become more original", "How assumptions limit thinking", "The value of absurd ideas"]
+    },
+    {
+        id: 6, title: "Unintended Use Test", icon: "flask", time: "2 min",
+        category: "prototyping", categoryLabel: "Prototyping",
+        goal: "Practice experimentation, rapid prototyping, and playful risk-taking.",
+        description: "Participants brainstorm unusual uses for objects, then physically test one idea to see what happens.",
+        materials: ["Random classroom objects", "Tape or simple building materials", "Workspace for testing"],
+        instructions: ["Grab a random object.", "In pairs, brainstorm as many unintended uses as possible in 2 minutes.", "Choose one idea and physically test it.", "Reflect on results."],
+        todo: ["Test ideas quickly", "Embrace failure", "Observe unexpected outcomes"],
+        notice: ["Surprising properties of materials", "New ideas created through testing", "How experimentation changes understanding"]
+    },
+    {
+        id: 7, title: "Tweet Your Prototype", icon: "chat", time: "5 min",
+        category: "communication", categoryLabel: "Communication",
+        goal: "Practice clarity, concise communication, and identifying core ideas.",
+        description: "Participants summarize complex projects or ideas using only 140 characters.",
+        materials: ["Sticky notes or index cards", "Pens", "Optional digital devices"],
+        instructions: ["Describe your project, prototype, or challenge in 140 characters or less.", "Imagine your audience only has 10 seconds to understand it.", "Revise until your message is simple, clear, and compelling.", "Share and vote on the clearest descriptions."],
+        todo: ["Eliminate unnecessary words", "Focus on the core message", "Prioritize clarity over detail"],
+        notice: ["Which words communicate the most meaning", "How difficult simplification can be", "Different interpretations of the same project"]
+    },
+    {
+        id: 8, title: "Build Something Out of Nothing", icon: "build", time: "10 min",
+        category: "prototyping", categoryLabel: "Prototyping",
+        goal: "Practice imagination, visionary thinking, and removing self-imposed limitations.",
+        description: "Participants create imaginative solutions or inventions without worrying about realism or feasibility.",
+        materials: ["Craft materials", "Paper and markers", "Recycled materials", "Tape or glue"],
+        instructions: ["You have 10 minutes to sketch, craft, or visually describe the most imaginative version of a prompt.", "Ignore realism and constraints.", "Think futuristic, exaggerated, impossible, or magical.", "Present your creation to the group."],
+        todo: ["Think beyond reality", "Exaggerate features", "Focus on imagination over practicality"],
+        notice: ["Ideas that emerge when constraints disappear", "Creative risks participants take", "Themes that appear across designs"]
+    },
+    {
+        id: 9, title: "The Worst Possible Re-Design", icon: "bomb", time: "10 min",
+        category: "divergent", categoryLabel: "Divergent Thinking",
+        goal: "Practice identifying flaws, challenging assumptions, and understanding design principles through reverse thinking.",
+        description: "Participants intentionally design terrible experiences or products to better understand good design principles.",
+        materials: ["Paper", "Markers", "Sticky notes", "Optional prototyping materials"],
+        instructions: ["Imagine your project or idea completely failed.", "Spend 10 minutes designing the WORST possible version.", "Make it frustrating, confusing, inefficient, or ridiculous.", "Share and reflect on lessons learned."],
+        todo: ["Exaggerate bad decisions", "Make designs intentionally frustrating", "Have fun with absurdity"],
+        notice: ["Hidden assumptions about good design", "Common frustrations users experience", "Design principles revealed through failure"]
+    },
+    {
+        id: 10, title: "Visual Metaphor Blitz", icon: "crystal", time: "3 min",
+        category: "divergent", categoryLabel: "Divergent Thinking",
+        goal: "Practice abstract thinking, analogy-making, and reframing ideas through metaphor.",
+        description: "Participants connect random objects to projects or ideas using metaphorical thinking.",
+        materials: ["Random objects", "Sticky notes", "Markers"],
+        instructions: ["Grab any object nearby without overthinking.", "You have 3 minutes to connect the object to your project using metaphor.", "Complete metaphor statements.", "Share with the group."],
+        todo: ["Think symbolically", "Explore emotional connections", "Avoid literal explanations"],
+        notice: ["How metaphors reveal deeper insights", "Unexpected similarities between ideas", "Different interpretations from different participants"]
+    },
+    {
+        id: 11, title: "One Line Storyboard", icon: "book", time: "5 min",
+        category: "communication", categoryLabel: "Communication",
+        goal: "Practice visual storytelling and simplifying ideas.",
+        description: "Participants create an entire storyboard using only one continuous line.",
+        materials: ["Paper", "Markers or pens"],
+        instructions: ["Create a 6-panel storyboard using only one continuous line.", "Tell a story or explain a process without lifting your marker."],
+        todo: ["Simplify visual communication", "Focus on sequence and flow", "Keep the line continuous"],
+        notice: ["How constraints shape storytelling", "Which visuals communicate clearly", "Creative workarounds participants invent"]
+    },
+    {
+        id: 12, title: "Mash-Up Invention", icon: "beaker", time: "5 min",
+        category: "divergent", categoryLabel: "Divergent Thinking",
+        goal: "Practice combining unrelated ideas into innovative concepts.",
+        description: "Participants merge two unrelated products or ideas into a single invention.",
+        materials: ["Random object cards", "Paper", "Markers", "Optional prototyping supplies"],
+        instructions: ["Combine two random products or ideas into one invention.", "Sketch and pitch the result."],
+        todo: ["Combine unrelated functions", "Embrace unusual combinations", "Build quickly"],
+        notice: ["Surprising compatibility between ideas", "Patterns in innovative thinking", "How novelty sparks engagement"]
+    },
+    {
+        id: 13, title: "Reverse Brainstorm", icon: "arrowleft", time: "5 min",
+        category: "divergent", categoryLabel: "Divergent Thinking",
+        goal: "Practice identifying hidden assumptions and opportunities.",
+        description: "Participants brainstorm ways to make problems worse, then reverse the ideas into useful solutions.",
+        materials: ["Whiteboard or sticky notes", "Markers"],
+        instructions: ["Instead of solving a problem, brainstorm ways to MAKE it worse.", "Reverse the bad ideas into productive solutions."],
+        todo: ["Think intentionally negatively", "Push bad ideas to extremes", "Reverse ideas into opportunities"],
+        notice: ["Hidden assumptions about the problem", "Root causes of frustrations", "Opportunities revealed through reversal"]
+    },
+    {
+        id: 14, title: "Emoji Pitch", icon: "smile", time: "5 min",
+        category: "communication", categoryLabel: "Communication",
+        goal: "Practice simplifying communication and storytelling.",
+        description: "Participants explain ideas entirely through emojis to test clarity and interpretation.",
+        materials: ["Phones, tablets, or paper", "Emoji reference charts (optional)"],
+        instructions: ["Describe your project or idea using ONLY emojis.", "Other groups interpret the message.", "Discuss clarity and communication."],
+        todo: ["Simplify your message", "Use symbols creatively", "Think visually"],
+        notice: ["How symbols communicate meaning", "Ambiguity in interpretation", "Which emojis communicate most effectively"]
+    },
+    {
+        id: 15, title: "Impossible Interview", icon: "mic", time: "10 min",
+        category: "empathy", categoryLabel: "Empathy",
+        goal: "Practice empathy and perspective-taking.",
+        description: "Participants interview everyday objects or spaces as though they were living beings with needs and frustrations.",
+        materials: ["Everyday objects", "Paper or notebooks"],
+        instructions: ["Choose an object or space.", "Interview it as if it were alive.", "Ask questions about frustrations, goals, and experiences."],
+        todo: ["Ask empathetic questions", "Imagine the object's perspective", "Build a personality for the object"],
+        notice: ["Overlooked user experiences", "Emotional connections to objects", "Unexpected insights about systems and spaces"]
+    },
+    {
+        id: 16, title: "Tiny Solution Challenge", icon: "wrench", time: "10 min",
+        category: "prototyping", categoryLabel: "Prototyping",
+        goal: "Practice noticing overlooked problems and designing practical interventions.",
+        description: "Participants rapidly design small solutions to tiny daily frustrations.",
+        materials: ["Craft materials", "Sticky notes", "Tape", "Paper"],
+        instructions: ["Identify a tiny daily annoyance.", "Create a quick solution in under 10 minutes.", "Focus on usefulness over complexity."],
+        todo: ["Observe everyday frustrations", "Prototype quickly", "Prioritize simplicity"],
+        notice: ["How often small frustrations are ignored", "The impact of simple solutions", "Creative approaches to practical problems"]
+    },
+    {
+        id: 17, title: "Design the Opposite", icon: "opposite", time: "10 min",
+        category: "divergent", categoryLabel: "Divergent Thinking",
+        goal: "Practice reframing and challenging default assumptions.",
+        description: "Participants redesign common experiences or objects to work in completely opposite ways.",
+        materials: ["Paper", "Markers", "Optional prototyping supplies"],
+        instructions: ["Take a common object, space, or experience.", "Redesign it to function in the exact opposite way.", "Share what new possibilities emerged."],
+        todo: ["Challenge assumptions", "Think from a completely different perspective", "Explore unconventional possibilities"],
+        notice: ["Hidden norms in design", "New opportunities created by reversal", "How assumptions limit innovation"]
+    },
+    {
+        id: 18, title: "Incomplete Instructions", icon: "question", time: "Timed",
+        category: "collaboration", categoryLabel: "Collaboration",
+        goal: "Practice navigating uncertainty and making assumptions productively.",
+        description: "Participants work through intentionally vague instructions and must move forward without clarification.",
+        materials: ["Prompt cards", "Prototyping materials", "Timer"],
+        instructions: ["Teams receive intentionally vague or incomplete instructions.", "Participants interpret the task and move forward without asking questions.", "Reflect afterward."],
+        todo: ["Make decisions confidently", "Collaborate through ambiguity", "Experiment rather than wait"],
+        notice: ["Assumptions your team makes", "Emotional responses to uncertainty", "Different interpretations across teams"]
+    },
+    {
+        id: 19, title: "Ambiguous Object Transformation", icon: "swirl", time: "5 min",
+        category: "divergent", categoryLabel: "Divergent Thinking",
+        goal: "Practice interpretation and divergent thinking.",
+        description: "Participants reinterpret abstract objects or shapes into completely different ideas.",
+        materials: ["Strange objects or abstract materials", "Paper", "Markers"],
+        instructions: ["Give everyone the same strange object or abstract shape.", "Participants decide what it could become.", "Share interpretations."],
+        todo: ["Interpret freely", "Avoid copying others", "Push toward unusual ideas"],
+        notice: ["Wide variation in interpretation", "How personal experiences influence ideas", "The flexibility of imagination"]
+    },
+    {
+        id: 20, title: "Half-Idea Challenge", icon: "handshake", time: "2 min",
+        category: "collaboration", categoryLabel: "Collaboration",
+        goal: "Practice collaborative ideation and building from uncertainty.",
+        description: "Participants begin ideas individually, then continuously build on one another's unfinished work.",
+        materials: ["Paper", "Markers", "Prototyping materials", "Timer"],
+        instructions: ["Each participant begins an idea sketch or prototype.", "After 2 minutes they pass it to another person.", "The next person continues the idea without explanation.", "Continue rotating several times before sharing."],
+        todo: ["Build rather than restart", "Respect previous ideas", "Add unexpected twists"],
+        notice: ["How collaboration changes ideas", "The evolution of concepts over time", "Surprising directions created by multiple perspectives"]
+    }
+];
+
+const grid = document.getElementById('grid');
+let currentFilter = 'all';
+let currentSearch = '';
+
+/* ===== RENDER CARDS ===== */
+function renderCards(data) {
+    grid.innerHTML = '';
+    if (data.length === 0) {
+        grid.innerHTML = `
+            <div class="empty-state">
+                <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+                <h3>No activities found</h3>
+                <p>Try adjusting your search or filter.</p>
+            </div>`;
+        return;
+    }
+
+    data.forEach((a, i) => {
+        const card = document.createElement('div');
+        card.className = 'card';
+        card.dataset.id = a.id;
+        card.style.animationDelay = (i * 0.04) + 's';
+
+        card.innerHTML = `
+            <div class="card-accent"></div>
+            <div class="card-header">
+                <div class="card-icon">${icons[a.icon] || icons.divergent}</div>
+                <div class="card-title-block">
+                    <div class="card-title">${a.title}</div>
+                    <span class="card-tag">
+                        ${icons[a.category]}
+                        ${a.categoryLabel}
+                    </span>
+                </div>
+            </div>
+            <div class="card-goal">${a.goal}</div>
+            <div class="card-meta">
+                <span>
+                    ${icons.clock}
+                    ${a.time}
+                </span>
+                <span>
+                    ${icons.materials}
+                    ${a.materials.length} materials
+                </span>
+                <span>
+                    ${icons.steps}
+                    ${a.instructions.length} steps
+                </span>
+            </div>
+            <div class="card-footer">
+                <button class="expand-btn" data-id="${a.id}">
+                    <span>Details</span>
+                    <svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>
+                </button>
+                <span class="time-chip">
+                    ${icons.clock}
+                    ${a.time}
+                </span>
+            </div>
+            <div class="card-details" id="details-${a.id}">
+                <div class="card-details-inner">
+                    <div class="detail-section">
+                        <h4>${icons.materials} Materials</h4>
+                        <div class="materials-grid">
+                            ${a.materials.map(m => '<span class="material-chip">' + m + '</span>').join('')}
+                        </div>
+                    </div>
+                    <div class="detail-section">
+                        <h4>${icons.instructions} Instructions</h4>
+                        <ol class="step-list">
+                            ${a.instructions.map((s, idx) => '<li><span class="step-num">' + (idx+1) + '</span>' + s + '</li>').join('')}
+                        </ol>
+                    </div>
+                    <div class="detail-section">
+                        <h4>${icons.todo} To Do</h4>
+                        <ul class="bullet-list">
+                            ${a.todo.map(t => '<li><span class="bullet-arrow">→</span>' + t + '</li>').join('')}
+                        </ul>
+                    </div>
+                    <div class="detail-section">
+                        <h4>${icons.notice} Notice</h4>
+                        <div class="notice-grid">
+                            ${a.notice.map(n => '<div class="notice-item">' + n + '</div>').join('')}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        grid.appendChild(card);
+    });
+
+    document.querySelectorAll('.expand-btn').forEach(btn => {
+        btn.addEventListener('click', e => {
+            e.stopPropagation();
+            const card = btn.closest('.card');
+            card.classList.toggle('expanded');
+            btn.querySelector('span').textContent = card.classList.contains('expanded') ? 'Close' : 'Details';
+        });
+    });
+
+    document.querySelectorAll('.card').forEach(card => {
+        card.addEventListener('click', e => {
+            if (e.target.closest('.expand-btn')) return;
+            openModal(parseInt(card.dataset.id));
+        });
+    });
+}
+
+/* ===== MODAL ===== */
+function openModal(id) {
+    const a = activities.find(x => x.id === id);
+    if (!a) return;
+
+    document.getElementById('modalIcon').innerHTML = icons[a.icon] || icons.divergent;
+    document.getElementById('modalTitle').textContent = a.title;
+    document.getElementById('modalTag').innerHTML =
+        icons[a.category] + ' ' + a.categoryLabel + ' &nbsp;·&nbsp; ' + a.time;
+
+    document.getElementById('modalBody').innerHTML = `
+        <div class="modal-goal">${a.goal}</div>
+        <div class="modal-desc">${a.description}</div>
+        <div class="modal-section">
+            <h4>${icons.materials} Materials Needed</h4>
+            <div class="materials-grid">
+                ${a.materials.map(m => '<span class="material-chip">' + m + '</span>').join('')}
+            </div>
+        </div>
+        <div class="modal-section">
+            <h4>${icons.instructions} Instructions</h4>
+            <ol class="step-list">
+                ${a.instructions.map((s, i) => '<li><span class="step-num">' + (i+1) + '</span>' + s + '</li>').join('')}
+            </ol>
+        </div>
+        <div class="modal-section">
+            <h4>${icons.todo} What To Do</h4>
+            <ul class="bullet-list">
+                ${a.todo.map(t => '<li><span class="bullet-arrow">→</span>' + t + '</li>').join('')}
+            </ul>
+        </div>
+        <div class="modal-section">
+            <h4>${icons.notice} What To Notice</h4>
+            <div class="notice-grid">
+                ${a.notice.map(n => '<div class="notice-item">' + n + '</div>').join('')}
+            </div>
+        </div>
+    `;
+
+    document.getElementById('modalOverlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+    document.getElementById('modalOverlay').classList.remove('open');
+    document.body.style.overflow = '';
+}
+
+document.getElementById('modalClose').addEventListener('click', closeModal);
+document.getElementById('modalOverlay').addEventListener('click', e => {
+    if (e.target === document.getElementById('modalOverlay')) closeModal();
+});
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+/* ===== FILTER & SEARCH ===== */
+function updateDisplay() {
+    let filtered = [...activities];
+    if (currentFilter !== 'all') filtered = filtered.filter(a => a.category === currentFilter);
+    if (currentSearch.trim()) {
+        const q = currentSearch.toLowerCase();
+        filtered = filtered.filter(a =>
+            a.title.toLowerCase().includes(q) ||
+            a.goal.toLowerCase().includes(q) ||
+            a.description.toLowerCase().includes(q) ||
+            a.categoryLabel.toLowerCase().includes(q) ||
+            a.materials.some(m => m.toLowerCase().includes(q))
+        );
+    }
+    renderCards(filtered);
+    document.getElementById('countBadge').textContent =
+        filtered.length + ' activit' + (filtered.length === 1 ? 'y' : 'ies');
+}
+
+document.getElementById('filterBtns').addEventListener('click', e => {
+    const btn = e.target.closest('.filter-btn');
+    if (!btn) return;
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentFilter = btn.dataset.filter;
+    updateDisplay();
+});
+
+document.getElementById('search').addEventListener('input', e => {
+    currentSearch = e.target.value;
+    updateDisplay();
+});
+
+/* ===== INIT ===== */
+renderCards(activities);
+</script>
+</body>
+</html>
